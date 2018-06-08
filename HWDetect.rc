@@ -91,14 +91,14 @@ BEGIN
     DEFPUSHBUTTON   "OK",IDOK,178,7,50,16,WS_GROUP
 END
 
-IDD_HWDETECT_DIALOG DIALOGEX 0, 0, 320, 200
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+IDD_HWDETECT_DIALOG DIALOGEX 0, 0, 389, 248
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
 EXSTYLE WS_EX_APPWINDOW
 CAPTION "HwDetect"
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
-    CONTROL         "",IDC_HW_TREE,"SysTreeView32",TVS_HASBUTTONS | TVS_HASLINES | TVS_NOSCROLL | WS_BORDER | WS_TABSTOP,7,7,306,145
-    EDITTEXT        IDC_EDIT_LOG,7,156,306,37,ES_MULTILINE | ES_AUTOHSCROLL | ES_READONLY | ES_WANTRETURN | WS_VSCROLL
+    CONTROL         "",IDC_HW_TREE,"SysTreeView32",TVS_HASBUTTONS | TVS_HASLINES | TVS_NOSCROLL | WS_BORDER | WS_HSCROLL | WS_TABSTOP,7,7,374,113
+    EDITTEXT        IDC_EDIT_LOG,7,124,374,117,ES_MULTILINE | ES_AUTOHSCROLL | ES_READONLY | ES_WANTRETURN | WS_VSCROLL
 END
 
 
@@ -108,8 +108,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,1
- PRODUCTVERSION 1,0,0,1
+ FILEVERSION 1,0,0,2
+ PRODUCTVERSION 1,0,0,2
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -126,12 +126,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "coolshou.idv"
             VALUE "FileDescription", "Detect HW change"
-            VALUE "FileVersion", "1.0.0.1"
+            VALUE "FileVersion", "1.0.0.2"
             VALUE "InternalName", "HWDetect.exe"
             VALUE "LegalCopyright", "2018: (c) coolshou.idv.  All rights reserved."
             VALUE "OriginalFilename", "HWDetect.exe"
             VALUE "ProductName", "HWDetect"
-            VALUE "ProductVersion", "1.0.0.1"
+            VALUE "ProductVersion", "1.0.0.2"
         END
     END
     BLOCK "VarFileInfo"
@@ -160,9 +160,9 @@ BEGIN
     IDD_HWDETECT_DIALOG, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 313
+        RIGHTMARGIN, 381
         TOPMARGIN, 7
-        BOTTOMMARGIN, 193
+        BOTTOMMARGIN, 241
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -179,6 +179,17 @@ BEGIN
     BEGIN
         MENUITEM "Disable",                     ID_POPUP_DISABLE
     END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_HWDETECT_DIALOG AFX_DIALOG_LAYOUT
+BEGIN
+    0
 END
 
 
