@@ -7,11 +7,22 @@
 #include "HWDetect.h"
 #include "HWDetectDlg.h"
 #include ".\hwdetectdlg.h"
+//#include <iostream>
+//#include <string>
+//#include <stdio.h>
+//#include <time.h>
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
+// Get current date/time, format is YYYY-MM-DD.HH:mm:ss
+//const std::wstring currentDateTime() {
+const CString currentDateTime() {
+	CString t = CTime::GetCurrentTime().Format("%Y-%m-%d.%X");
+	return t;
+}
 
 //////////////////////////////////////////////////////////////////
 // CAboutDlg dialog used for App About
@@ -246,12 +257,14 @@ void CHWDetectDlg::UpdateDevice(PDEV_BROADCAST_DEVICEINTERFACE pDevInf, WPARAM w
 	szClass = szDevId.Left(idx);
 	CString szLog;
 	m_ctrlEdit.GetWindowText(szLog);
+	CString szTime;
+	szTime = currentDateTime();
 	CString szTmp;
 	if ( DBT_DEVICEARRIVAL == wParam ) {
-		szTmp.Format(_T("Adding %s\r\n"), szDevId.GetBuffer());
+		szTmp.Format(_T("%s Adding %s\r\n"), szTime, szDevId.GetString());
 		// TRACE("Adding %s\n", szDevId.GetBuffer());
 	} else {
-		szTmp.Format(_T("Removing %s\r\n"), szDevId.GetBuffer());
+		szTmp.Format(_T("%s Removing %s\r\n"), szTime, szDevId.GetString());
 		// TRACE("Removing %s\n", szDevId.GetBuffer());
 	}
 	szLog.Append(szTmp);
