@@ -6,13 +6,18 @@
 #include <setupapi.h>
 #include "afxcmn.h"
 #include "afxwin.h"
-
+#include "bpctrlanchormap.h"
 
 // CHWDetectDlg dialog
 class CHWDetectDlg : public CDialog
 {
 // Construction
 public:
+	// -------------------------------------
+	// the following code declares the 
+	// required elements for our AnchorMap
+	// -------------------------------------
+	DECLARE_ANCHOR_MAP();
 	CHWDetectDlg(CWnd* pParent = NULL);	// standard constructor
 
 // Dialog Data
@@ -67,6 +72,8 @@ public:
 	CTreeCtrl m_ctrlTree;
 	afx_msg void OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);
 	afx_msg void OnPopupDisable();
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	CEdit m_ctrlEdit;
 };
 

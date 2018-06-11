@@ -7,10 +7,6 @@
 #include "HWDetect.h"
 #include "HWDetectDlg.h"
 #include ".\hwdetectdlg.h"
-//#include <iostream>
-//#include <string>
-//#include <stdio.h>
-//#include <time.h>
 
 
 #ifdef _DEBUG
@@ -62,6 +58,17 @@ END_MESSAGE_MAP()
 //////////////////////////////////////////////////////////////////
 // CHWDetectDlg dialog
 //////////////////////////////////////////////////////////////////
+// ------------------------------------------------
+// The following code declares our AnchorMap
+// and defines how each control should be handled
+// ------------------------------------------------
+BEGIN_ANCHOR_MAP(CHWDetectDlg)
+	ANCHOR_MAP_ENTRY(IDC_HW_TREE, ANF_TOP | ANF_LEFT | ANF_RIGHT)
+	ANCHOR_MAP_ENTRY(IDC_EDIT_LOG, ANF_TOP | ANF_BOTTOM | ANF_LEFT | ANF_RIGHT)
+//	ANCHOR_MAP_ENTRY(IDOK, ANF_BOTTOM | ANF_RIGHT)
+//	ANCHOR_MAP_ENTRY(IDCANCEL, ANF_BOTTOM | ANF_RIGHT)
+END_ANCHOR_MAP()
+
 CHWDetectDlg::CHWDetectDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CHWDetectDlg::IDD, pParent)
 {
@@ -79,6 +86,8 @@ BEGIN_MESSAGE_MAP(CHWDetectDlg, CDialog)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_WM_SIZE()
+	ON_WM_ERASEBKGND()
 	ON_MESSAGE(WM_DEVICECHANGE, OnMyDeviceChange)
 	//}}AFX_MSG_MAP
 	ON_WM_CONTEXTMENU()
@@ -149,6 +158,13 @@ BOOL CHWDetectDlg::OnInitDialog()
 			return FALSE;
 		}
 	}
+	// --------------------------------------
+	// At this point, we need set everything
+	// up for our dialog except the 
+	// anchoring/docking. We will do this now
+	// with a call to InitAnchors()
+	// --------------------------------------
+	InitAnchors(ANIF_SIZEGRIP);
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -470,4 +486,31 @@ void CHWDetectDlg::OnPopupDisable()
 
 		SetupDiDestroyDeviceInfoList(hDevInfo);
 	}
+}
+// ==============================================================================
+// Within this message-handler we must call the HandleAnchors() function
+// to get the controls moved
+// ==============================================================================
+void CHWDetectDlg::OnSize(UINT nType, int cx, int cy) {
+
+	CDialog::OnSize(nType, cx, cy);
+
+	CRect rcWnd;
+	GetWindowRect(&rcWnd);
+
+	HandleAnchors(&rcWnd);     // you can alternatively pass NULL for &rcWnd
+	Invalidate(false);         // this is for ensuring the controls to be redrawn correctly 
+
+
+}
+
+// ==============================================================================
+// ==============================================================================
+BOOL CHWDetectDlg::OnEraseBkgnd(CDC* pDC) {
+
+	// Here we call the EraseBackground-Handler from the
+	// anchor-map which will reduce the flicker.  
+
+	return(m_bpfxAnchorMap.EraseBackground(pDC->m_hDC));
+
 }
