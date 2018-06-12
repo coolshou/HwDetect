@@ -89,7 +89,7 @@ BEGIN
     LTEXT           "HWDetect Version:",IDC_STATIC,39,15,62,8,SS_NOPREFIX
     LTEXT           "Copyright (C) 2018",IDC_STATIC,39,26,119,8
     DEFPUSHBUTTON   "OK",IDOK,178,7,50,16,WS_GROUP
-    LTEXT           "1.0.0.0",IDC_STATIC_VERSION,105,15,49,8
+    LTEXT           "1.0.0.0",IDC_VERSION,105,15,49,8
 END
 
 IDD_HWDETECT_DIALOG DIALOGEX 0, 0, 389, 248
@@ -110,8 +110,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,3
- PRODUCTVERSION 1,0,0,3
+ FILEVERSION 1,0,0,4
+ PRODUCTVERSION 1,0,0,4
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -128,12 +128,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "coolshou.idv"
             VALUE "FileDescription", "Detect HW change"
-            VALUE "FileVersion", "1.0.0.3"
+            VALUE "FileVersion", "1.0.0.4"
             VALUE "InternalName", "HWDetect.exe"
             VALUE "LegalCopyright", "2018: (c) coolshou.idv.  All rights reserved."
             VALUE "OriginalFilename", "HWDetect.exe"
             VALUE "ProductName", "HWDetect"
-            VALUE "ProductVersion", "1.0.0.3"
+            VALUE "ProductVersion", "1.0.0.4"
         END
     END
     BLOCK "VarFileInfo"

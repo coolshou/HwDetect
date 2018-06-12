@@ -11,7 +11,7 @@
 class CAboutDlg : public CDialog
 {
 public:
-	CAboutDlg(CWnd* pParent = NULL);
+	CAboutDlg(CWnd* pParent = NULL, CString csVer = L"1.0.0.0");
 
 	// Dialog Data
 	enum { IDD = IDD_ABOUTBOX };
@@ -19,10 +19,15 @@ public:
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 														// Implementation
+	virtual BOOL OnInitDialog();
 protected:
 	DECLARE_MESSAGE_MAP()
+
 public:
 	//	afx_msg void OnPopupDisable();
 	//	afx_msg void OnUpdatePopupEnable(CCmdUI *pCmdUI);
 	CStatic m_ctrlText;
+private:
+	CString m_FileVersion;
+
 };

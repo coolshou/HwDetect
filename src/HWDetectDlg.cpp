@@ -6,8 +6,8 @@
 #include <setupapi.h>
 #include "HWDetect.h"
 #include "HWDetectDlg.h"
-#include ".\hwdetectdlg.h"
-
+#include "AboutDlg.h"
+#include "GlobalFunctions.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -19,40 +19,6 @@ const CString currentDateTime() {
 	CString t = CTime::GetCurrentTime().Format("%Y-%m-%d.%X");
 	return t;
 }
-
-//////////////////////////////////////////////////////////////////
-// CAboutDlg dialog used for App About
-//////////////////////////////////////////////////////////////////
-class CAboutDlg : public CDialog
-{
-public:
-	CAboutDlg();
-
-// Dialog Data
-	enum { IDD = IDD_ABOUTBOX };
-
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-
-// Implementation
-protected:
-	DECLARE_MESSAGE_MAP()
-public:
-//	afx_msg void OnPopupDisable();
-//	afx_msg void OnUpdatePopupEnable(CCmdUI *pCmdUI);
-};
-
-CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
-{
-}
-
-void CAboutDlg::DoDataExchange(CDataExchange* pDX)
-{
-	CDialog::DoDataExchange(pDX);
-}
-
-BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-END_MESSAGE_MAP()
 
 
 //////////////////////////////////////////////////////////////////
@@ -70,7 +36,7 @@ BEGIN_ANCHOR_MAP(CHWDetectDlg)
 //	ANCHOR_MAP_ENTRY(IDCANCEL, ANF_BOTTOM | ANF_RIGHT)
 END_ANCHOR_MAP()
 
-CHWDetectDlg::CHWDetectDlg(CWnd* pParent /*=NULL*/)
+CHWDetectDlg::CHWDetectDlg(CWnd* pParent)
 	: CDialog(CHWDetectDlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -160,6 +126,10 @@ BOOL CHWDetectDlg::OnInitDialog()
 			return FALSE;
 		}
 	}
+	m_FileVersion = CGlobalFunctions::GetFileVersionX();
+	m_ProductVersion = CGlobalFunctions::GetProductVersionX();
+	//GetFileVersionX();
+
 	// --------------------------------------
 	// At this point, we need set everything
 	// up for our dialog except the 
@@ -175,7 +145,7 @@ void CHWDetectDlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
 	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
 	{
-		CAboutDlg dlgAbout;
+		CAboutDlg dlgAbout(this, m_FileVersion);
 		dlgAbout.DoModal();
 	}
 	else
