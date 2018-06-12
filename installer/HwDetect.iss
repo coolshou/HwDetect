@@ -31,6 +31,7 @@ AppCopyright={#MyAppPublisher}
 AppMutex={#MyAppName}
 SetupIconFile=..\src\res\HWDetect.ico
 UninstallDisplayIcon={app}\HWDetect.exe
+CloseApplications=force
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
