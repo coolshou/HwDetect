@@ -730,7 +730,7 @@ public:
     DeleteObject(hRgn1);
     
     DeleteObject(hBrush);
-  
+	return true;
   };
 
     
