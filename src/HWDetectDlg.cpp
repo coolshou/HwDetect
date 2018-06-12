@@ -65,6 +65,7 @@ END_MESSAGE_MAP()
 BEGIN_ANCHOR_MAP(CHWDetectDlg)
 	ANCHOR_MAP_ENTRY(IDC_HW_TREE, ANF_TOP | ANF_LEFT | ANF_RIGHT)
 	ANCHOR_MAP_ENTRY(IDC_EDIT_LOG, ANF_TOP | ANF_BOTTOM | ANF_LEFT | ANF_RIGHT)
+	ANCHOR_MAP_ENTRY(IDC_BUTTON_CLEAR, ANF_BOTTOM | ANF_RIGHT)
 //	ANCHOR_MAP_ENTRY(IDOK, ANF_BOTTOM | ANF_RIGHT)
 //	ANCHOR_MAP_ENTRY(IDCANCEL, ANF_BOTTOM | ANF_RIGHT)
 END_ANCHOR_MAP()
@@ -80,6 +81,7 @@ void CHWDetectDlg::DoDataExchange(CDataExchange* pDX)
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_HW_TREE, m_ctrlTree);
 	DDX_Control(pDX, IDC_EDIT_LOG, m_ctrlEdit);
+	DDX_Control(pDX, IDC_BUTTON_CLEAR, m_ctrlButtonClear);
 }
 
 BEGIN_MESSAGE_MAP(CHWDetectDlg, CDialog)
@@ -89,9 +91,9 @@ BEGIN_MESSAGE_MAP(CHWDetectDlg, CDialog)
 	ON_WM_SIZE()
 	ON_WM_ERASEBKGND()
 	ON_MESSAGE(WM_DEVICECHANGE, OnMyDeviceChange)
-	//}}AFX_MSG_MAP
 	ON_WM_CONTEXTMENU()
 	ON_COMMAND(ID_POPUP_DISABLE, OnPopupDisable)
+	ON_BN_CLICKED(IDC_BUTTON_CLEAR, OnClearButtonClick)
 END_MESSAGE_MAP()
 
 
@@ -486,6 +488,9 @@ void CHWDetectDlg::OnPopupDisable()
 
 		SetupDiDestroyDeviceInfoList(hDevInfo);
 	}
+}
+void CHWDetectDlg::OnClearButtonClick() {
+	m_ctrlEdit.SetWindowText(L"");
 }
 // ==============================================================================
 // Within this message-handler we must call the HandleAnchors() function
