@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "HwDetect"
-#define MyAppVersion "1.0.0.3"
+#define MyAppVersion "1.0.0.4"
 #define MyAppPublisher "Coonshou.idv, Inc."
 #define MyAppURL "https://github.com/coolshou/HwDetect"
 #define MyAppExeName "HWDetect.exe"
@@ -29,7 +29,7 @@ SolidCompression=yes
 ArchitecturesInstallIn64BitMode=x64 
 AppCopyright={#MyAppPublisher}
 AppMutex={#MyAppName}
-SetupIconFile=..\res\HWDetect.ico
+SetupIconFile=..\src\res\HWDetect.ico
 UninstallDisplayIcon={app}\HWDetect.exe
 
 [Languages]
