@@ -55,6 +55,7 @@ BEGIN_MESSAGE_MAP(CHWDetectDlg, CDialog)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_WM_SIZE()
+	ON_WM_CLOSE()
 	ON_WM_ERASEBKGND()
 	ON_MESSAGE(WM_DEVICECHANGE, OnMyDeviceChange)
 	ON_WM_CONTEXTMENU()
@@ -154,6 +155,10 @@ void CHWDetectDlg::OnSysCommand(UINT nID, LPARAM lParam)
 	}
 }
 
+void CHWDetectDlg::OnClose()
+{
+	PostQuitMessage(0);
+}
 // If you add a minimize button to your dialog, you will need the code below
 //  to draw the icon.  For MFC applications using the document/view model,
 //  this is automatically done for you by the framework.
