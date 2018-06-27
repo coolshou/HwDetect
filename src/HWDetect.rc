@@ -54,16 +54,6 @@ END
 
 #endif    // APSTUDIO_INVOKED
 
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Icon
-//
-
-// Icon with lowest ID value placed first to ensure application icon
-// remains consistent on all systems.
-IDR_MAINFRAME           ICON                    "res\\HWDetect.ico"
-
 #endif    // Chinese (Traditional, Hong Kong SAR) resources
 /////////////////////////////////////////////////////////////////////////////
 
@@ -74,6 +64,16 @@ IDR_MAINFRAME           ICON                    "res\\HWDetect.ico"
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\HWDetect.ico"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -101,6 +101,18 @@ BEGIN
     CONTROL         "",IDC_HW_TREE,"SysTreeView32",TVS_HASBUTTONS | TVS_HASLINES | TVS_NOSCROLL | WS_BORDER | WS_HSCROLL | WS_TABSTOP,7,7,374,91
     EDITTEXT        IDC_EDIT_LOG,7,102,374,124,ES_MULTILINE | ES_AUTOHSCROLL | ES_READONLY | ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL
     PUSHBUTTON      "Clear",IDC_BUTTON_CLEAR,331,227,50,14
+END
+
+IDD_OPTION_DIALOG DIALOGEX 0, 0, 255, 84
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Options"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,143,63,50,14,BS_BOTTOM
+    PUSHBUTTON      "Cancel",IDCANCEL,198,63,50,14,BS_VCENTER
+    CONTROL         "Start in System Tray",IDC_CHECK_START_TO_TRAY,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,7,81,10
+    CONTROL         "Close to System Tray",IDC_CHECK_CLOSE_TO_TRAY,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,20,84,10
+    CONTROL         "Lanch on System Start",IDC_CHECK_LANCH_ON_BOOT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,34,88,10
 END
 
 
@@ -166,6 +178,14 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 241
     END
+
+    IDD_OPTION_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 248
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 77
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -180,6 +200,14 @@ BEGIN
     POPUP "Popup"
     BEGIN
         MENUITEM "Disable",                     ID_POPUP_DISABLE
+    END
+END
+
+IDR_TRAY_MENU MENU
+BEGIN
+    POPUP "Popup"
+    BEGIN
+        MENUITEM "Exit",                        ID_EXIT
     END
 END
 
@@ -199,6 +227,11 @@ BEGIN
     0
 END
 
+IDD_OPTION_DIALOG AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -208,6 +241,11 @@ END
 STRINGTABLE
 BEGIN
     IDS_ABOUTBOX            "&About HWDetect..."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_OPTION_DIALOG       "&Option"
 END
 
 #endif    // English (United States) resources

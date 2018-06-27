@@ -8,7 +8,7 @@
 #endif
 
 #include "resource.h"		// main symbols
-
+#include "systemtray.h"
 
 // CHWDetectApp:
 // See HWDetect.cpp for the implementation of this class
@@ -20,12 +20,13 @@ public:
 	CHWDetectApp();
 
 // Overrides
-	public:
+public:
 	virtual BOOL InitInstance();
 
 // Implementation
 
 	DECLARE_MESSAGE_MAP()
+	CSystemTray m_TrayIcon;
 };
 
 extern CHWDetectApp theApp;

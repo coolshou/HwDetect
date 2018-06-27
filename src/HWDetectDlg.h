@@ -10,6 +10,7 @@
 #include "afxwin.h"
 #include "bpctrlanchormap.h"
 
+
 // CHWDetectDlg dialog
 class CHWDetectDlg : public CDialog
 {
@@ -83,8 +84,11 @@ public:
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	CEdit m_ctrlEdit;
 	CButton m_ctrlButtonClear;
-
-
+private:
+	bool m_bStartInTray;
+	bool m_bCloseToTray;
+public:
+	afx_msg void OnExit();
 };
 
 // Compute Device Class: this is used to get the tree contrl root icon

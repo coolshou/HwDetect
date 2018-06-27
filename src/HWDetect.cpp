@@ -1,4 +1,4 @@
-// HWDetect.cpp : Defines the class behaviors for the application.
+﻿// HWDetect.cpp : Defines the class behaviors for the application.
 //
 
 #include "stdafx.h"
@@ -23,6 +23,7 @@ CHWDetectApp::CHWDetectApp()
 {
 	// TODO: add construction code here,
 	// Place all significant initialization in InitInstance
+
 }
 
 
@@ -51,10 +52,20 @@ BOOL CHWDetectApp::InitInstance()
 	// Change the registry key under which our settings are stored
 	// TODO: You should modify this string to be something appropriate
 	// such as the name of your company or organization
-	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
+	SetRegistryKey(_T("coolshou.idv"));
 
+	// Create the tray icon
+	if (!m_TrayIcon.Create(WM_ICON_NOTIFY, // Icon notify message to use, 响应消息
+		_T("HWDetect"), // tooltip,鼠标放置其上时显示文字
+		LoadIcon(IDR_MAINFRAME), // ID of tray icon,托盘图标
+		IDR_TRAY_MENU)) // ID of PopUp Menu,右键弹出菜单
+	{
+		return FALSE;
+	}
 	CHWDetectDlg dlg;
 	m_pMainWnd = &dlg;
+	//m_pMainWnd.inst
+
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
 	{

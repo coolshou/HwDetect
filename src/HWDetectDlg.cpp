@@ -1,4 +1,4 @@
-// HWDetectDlg.cpp : implementation file
+﻿// HWDetectDlg.cpp : implementation file
 //
 
 #include "stdafx.h"
@@ -8,6 +8,8 @@
 #include "HWDetectDlg.h"
 #include "AboutDlg.h"
 #include "GlobalFunctions.h"
+#include "OptionDlg.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -40,6 +42,9 @@ CHWDetectDlg::CHWDetectDlg(CWnd* pParent)
 	: CDialog(CHWDetectDlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	//TODO: read from register
+	m_bStartInTray = false;
+	m_bCloseToTray = true;
 }
 
 void CHWDetectDlg::DoDataExchange(CDataExchange* pDX)
@@ -61,6 +66,7 @@ BEGIN_MESSAGE_MAP(CHWDetectDlg, CDialog)
 	ON_WM_CONTEXTMENU()
 	ON_COMMAND(ID_POPUP_DISABLE, OnPopupDisable)
 	ON_BN_CLICKED(IDC_BUTTON_CLEAR, OnClearButtonClick)
+	ON_COMMAND(ID_EXIT, &CHWDetectDlg::OnExit)
 END_MESSAGE_MAP()
 
 
@@ -70,20 +76,41 @@ BOOL CHWDetectDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
+	// minimize at startup ?
+	if (m_bStartInTray) //此变量修改最好写入注册表
+	{
+		PostMessage(WM_SYSCOMMAND, SC_MINIMIZE, 0);
+		// this seems to be a workaround to let the statement above to get working
+		CRect rect;
+		GetWindowRect(rect);
+		SetWindowPos(&CWnd::wndTop, rect.left, rect.top, rect.Width(), rect.Height(), SWP_HIDEWINDOW | SWP_NOSIZE | SWP_NOMOVE);
+	}
+	
+	//ASSERT((IDM_OPTION_DIALOG & 0xFFF0) == IDM_OPTION_DIALOG);
+	//ASSERT(IDM_OPTION_DIALOG < 0xF000);
+
 	// Add "About..." menu item to system menu.
 
 	// IDM_ABOUTBOX must be in the system command range.
-	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
-	ASSERT(IDM_ABOUTBOX < 0xF000);
+	//ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
+	//ASSERT(IDM_ABOUTBOX < 0xF000);
 
 	CMenu* pSysMenu = GetSystemMenu(FALSE);
 	if (pSysMenu != NULL)
 	{
+		CString strOptionMenu;
+		strOptionMenu.LoadString(IDS_OPTION_DIALOG);
+		// Add "Option..." menu item to system menu.
+		if (!strOptionMenu.IsEmpty())
+		{
+			pSysMenu->AppendMenu(MF_SEPARATOR);
+			pSysMenu->AppendMenu(MF_STRING, IDM_OPTION_DIALOG, strOptionMenu);
+		}
 		CString strAboutMenu;
 		strAboutMenu.LoadString(IDS_ABOUTBOX);
 		if (!strAboutMenu.IsEmpty())
 		{
-			pSysMenu->AppendMenu(MF_SEPARATOR);
+			//pSysMenu->AppendMenu(MF_SEPARATOR);
 			pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
 		}
 	}
@@ -144,14 +171,31 @@ BOOL CHWDetectDlg::OnInitDialog()
 
 void CHWDetectDlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
-	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
+	switch (nID)
 	{
-		CAboutDlg dlgAbout(this, m_FileVersion);
-		dlgAbout.DoModal();
-	}
-	else
-	{
-		CDialog::OnSysCommand(nID, lParam);
+		case SC_CLOSE:
+			if (m_bCloseToTray) {
+				ShowWindow(SW_HIDE); //最小化隐藏窗口
+			}
+			break;
+		case SC_MINIMIZE:
+			// do not minimize to the taskbar
+			ShowWindow(SW_HIDE); //最小化隐藏窗口
+			break;
+		default:
+			if ((nID & 0xFFF0) == IDM_OPTION_DIALOG)
+			{
+				COptionDlg dlgOption(this);
+				dlgOption.DoModal();
+			} else if ((nID & 0xFFF0) == IDM_ABOUTBOX)
+			{
+				CAboutDlg dlgAbout(this, m_FileVersion);
+				dlgAbout.DoModal();
+			}
+			else
+			{
+				CDialog::OnSysCommand(nID, lParam);
+			}
 	}
 }
 
@@ -493,4 +537,12 @@ BOOL CHWDetectDlg::OnEraseBkgnd(CDC* pDC) {
 
 	return(m_bpfxAnchorMap.EraseBackground(pDC->m_hDC));
 
+}
+
+
+void CHWDetectDlg::OnExit()
+{
+	// TODO: Add your command handler code here
+	m_bCloseToTray = false;
+	exit(0);
 }
