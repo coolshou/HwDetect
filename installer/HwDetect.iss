@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "HwDetect"
-#define MyAppVersion "1.0.0.4"
+#define MyAppVersion "1.0.0.5"
 #define MyAppPublisher "Coonshou.idv, Inc."
 #define MyAppURL "https://github.com/coolshou/HwDetect"
 #define MyAppExeName "HWDetect.exe"
