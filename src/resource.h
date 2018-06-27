@@ -21,6 +21,7 @@
 #define IDC_CHECK_CLOSE_TO_TRAY         1008
 #define IDC_CHECK_LANCH_ON_START        1009
 #define IDC_CHECK_LANCH_ON_BOOT         1009
+#define IDC_CHECK_LAUNCH_ON_BOOT        1009
 #define ID_POPUP_ENABLE                 32771
 #define ID_POPUP_DISABLE                32772
 #define ID_SHOW_HIDE                    32773

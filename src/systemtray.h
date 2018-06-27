@@ -23,7 +23,7 @@ class CSystemTray : public CWnd
         BOOL SetIcon(UINT nIDResource);
 
         BOOL SetNotificationWnd(CWnd* pNotifyWnd);
-        virtual LRESULT OnTrayNotification(WPARAM uID, LPARAM lEvent);
+        virtual LRESULT OnTrayNotification(WPARAM wParam, LPARAM lParam);
 
     // Overrides
         // ClassWizard generated virtual function overrides

@@ -10,7 +10,8 @@
 class COptionDlg : public CDialog
 {
 public:
-	COptionDlg(CWnd* pParent = NULL);
+	COptionDlg(CWnd* pParent = NULL, 
+		BOOL bStartInTray= true, BOOL bCloseToTray = true, BOOL bLaunchOnBoot = true);
 
 	// Dialog Data
 	enum { IDD = IDD_OPTION_DIALOG };
@@ -21,12 +22,9 @@ protected:
 	virtual BOOL OnInitDialog();
 protected:
 	DECLARE_MESSAGE_MAP()
-
 public:
-	//	afx_msg void OnPopupDisable();
-	//	afx_msg void OnUpdatePopupEnable(CCmdUI *pCmdUI);
-	CStatic m_ctrlText;
-private:
-	CString m_FileVersion;
-
+	BOOL m_bStartInTray;
+	BOOL m_bCloseToTray;
+	BOOL m_bLaunchOnBoot;
+	afx_msg void OnBnClickedOk();
 };

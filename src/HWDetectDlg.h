@@ -74,21 +74,27 @@ protected:
 
 	CString m_FileVersion;
 	CString m_ProductVersion;
+	//save setting to register
+	void applySetting();
+	void loadSetting();
 
 public:
 	CTreeCtrl m_ctrlTree;
+	CEdit m_ctrlEdit;
+	CButton m_ctrlButtonClear;
+
 	afx_msg void OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);
 	afx_msg void OnPopupDisable();
 	afx_msg void OnClearButtonClick();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
-	CEdit m_ctrlEdit;
-	CButton m_ctrlButtonClear;
+	afx_msg void OnExit();
 private:
 	bool m_bStartInTray;
 	bool m_bCloseToTray;
-public:
-	afx_msg void OnExit();
+	bool m_bLaunchOnBoot;
+
+
 };
 
 // Compute Device Class: this is used to get the tree contrl root icon

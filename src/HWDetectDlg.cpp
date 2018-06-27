@@ -9,7 +9,11 @@
 #include "AboutDlg.h"
 #include "GlobalFunctions.h"
 #include "OptionDlg.h"
+#include "const.h"
 
+//#include <windows.h>
+#include <iostream>
+using std::cout; using std::endl;
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -21,8 +25,57 @@ const CString currentDateTime() {
 	CString t = CTime::GetCurrentTime().Format("%Y-%m-%d.%X");
 	return t;
 }
+//### register read/write
+bool SetVal(HKEY hKey, LPCTSTR lpKey, DWORD data)
+{
+	LONG nError = RegSetValueEx(hKey, lpKey, NULL, REG_DWORD, (LPBYTE)&data, sizeof(DWORD));
 
+	if (nError) {
+		cout << "Error: " << nError << " Could not set registry value: " << (char*)lpKey << endl;
+		return false;
+	}
+	else {
+		return true;
+	}
+}
 
+DWORD GetVal(HKEY hKey, LPCTSTR lpKey)
+{
+	DWORD data;		
+	DWORD size = sizeof(data);	
+	DWORD type = REG_DWORD;
+	LONG nError = RegQueryValueEx(hKey, lpKey, NULL, &type, (LPBYTE)&data, &size);
+
+	if (nError == ERROR_FILE_NOT_FOUND)
+		data = 0; // The value will be created and set to data next time SetVal() is called.
+	else if (nError)
+		cout << "Error: " << nError << " Could not get registry value " << (char*)lpKey << endl;
+
+	return data;
+}
+
+LONG WINAPI RegDeleteKeyRecursive(HKEY hKey, LPCTSTR lpSubKey)
+{
+	LONG lResult;
+	HKEY hSubKey = NULL;
+	DWORD dwIndex, cbName;
+	char szSubKey[512];
+	FILETIME ft;
+	lResult = RegOpenKeyEx(hKey, lpSubKey, 0, KEY_ALL_ACCESS, &hSubKey);
+	if (lResult == ERROR_SUCCESS)
+	{
+		for (dwIndex = 0;; dwIndex = 0)
+		{
+			cbName = sizeof(szSubKey) / sizeof(szSubKey[0]);
+			lResult = RegEnumKeyEx(hSubKey, dwIndex, (LPWSTR)szSubKey, &cbName, NULL, NULL, NULL, &ft);
+			if (lResult == ERROR_SUCCESS) RegDeleteKeyRecursive(hSubKey, (LPCTSTR)szSubKey);
+			else break;
+		}
+		RegCloseKey(hSubKey);
+	}
+	int re = RegDeleteKey(hKey, lpSubKey);
+	return re;
+}
 //////////////////////////////////////////////////////////////////
 // CHWDetectDlg dialog
 //////////////////////////////////////////////////////////////////
@@ -42,9 +95,7 @@ CHWDetectDlg::CHWDetectDlg(CWnd* pParent)
 	: CDialog(CHWDetectDlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-	//TODO: read from register
-	m_bStartInTray = false;
-	m_bCloseToTray = true;
+	loadSetting();
 }
 
 void CHWDetectDlg::DoDataExchange(CDataExchange* pDX)
@@ -76,8 +127,8 @@ BOOL CHWDetectDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	// minimize at startup ?
-	if (m_bStartInTray) //此变量修改最好写入注册表
+	// minimize at startup
+	if (m_bStartInTray)
 	{
 		PostMessage(WM_SYSCOMMAND, SC_MINIMIZE, 0);
 		// this seems to be a workaround to let the statement above to get working
@@ -86,9 +137,6 @@ BOOL CHWDetectDlg::OnInitDialog()
 		SetWindowPos(&CWnd::wndTop, rect.left, rect.top, rect.Width(), rect.Height(), SWP_HIDEWINDOW | SWP_NOSIZE | SWP_NOMOVE);
 	}
 	
-	//ASSERT((IDM_OPTION_DIALOG & 0xFFF0) == IDM_OPTION_DIALOG);
-	//ASSERT(IDM_OPTION_DIALOG < 0xF000);
-
 	// Add "About..." menu item to system menu.
 
 	// IDM_ABOUTBOX must be in the system command range.
@@ -177,6 +225,9 @@ void CHWDetectDlg::OnSysCommand(UINT nID, LPARAM lParam)
 			if (m_bCloseToTray) {
 				ShowWindow(SW_HIDE); //最小化隐藏窗口
 			}
+			else {
+				CDialog::OnSysCommand(nID, lParam);
+			}
 			break;
 		case SC_MINIMIZE:
 			// do not minimize to the taskbar
@@ -185,8 +236,14 @@ void CHWDetectDlg::OnSysCommand(UINT nID, LPARAM lParam)
 		default:
 			if ((nID & 0xFFF0) == IDM_OPTION_DIALOG)
 			{
-				COptionDlg dlgOption(this);
-				dlgOption.DoModal();
+				COptionDlg dlgOption(this, m_bStartInTray, m_bCloseToTray, m_bLaunchOnBoot);
+				if (dlgOption.DoModal() == IDOK) {
+					m_bStartInTray = dlgOption.m_bStartInTray;
+					m_bCloseToTray = dlgOption.m_bCloseToTray;
+					m_bLaunchOnBoot = dlgOption.m_bLaunchOnBoot;
+					
+					applySetting();
+				}
 			} else if ((nID & 0xFFF0) == IDM_ABOUTBOX)
 			{
 				CAboutDlg dlgAbout(this, m_FileVersion);
@@ -542,7 +599,72 @@ BOOL CHWDetectDlg::OnEraseBkgnd(CDC* pDC) {
 
 void CHWDetectDlg::OnExit()
 {
-	// TODO: Add your command handler code here
 	m_bCloseToTray = false;
 	exit(0);
+}
+
+void CHWDetectDlg::applySetting()
+{
+	HKEY hkey = NULL;
+	long lReturn;
+	lReturn = RegCreateKey(HKEY_CURRENT_USER, APP_REG_PATH, &hkey);
+	if (lReturn == ERROR_SUCCESS)
+	{
+		SetVal(hkey, L"bStartInTray", m_bStartInTray);
+		SetVal(hkey, L"bCloseToTray", m_bCloseToTray);
+		SetVal(hkey, L"bLaunchOnBoot", m_bLaunchOnBoot);
+	}
+	RegCloseKey(hkey);
+
+	if (m_bLaunchOnBoot)
+	{
+		TCHAR szPath[_MAX_PATH];
+		VERIFY(::GetModuleFileName(AfxGetApp()->m_hInstance, szPath, _MAX_PATH));
+		CString csPath(szPath);
+		//HKEY_LOCAL_MACHINE : all user
+		//HKEY_CURRENT_USER  : current user
+		if (ERROR_SUCCESS != RegCreateKey(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", &hkey))
+		{
+			AfxMessageBox(_T("Create regkey for Launch fail"));
+			return;
+		}
+		if (RegSetValueEx(hkey, _T(APP_NAME),
+			0, REG_SZ, (BYTE*)csPath.GetBuffer(), 
+			csPath.GetLength() * sizeof(TCHAR))!=ERROR_SUCCESS)
+		{
+			AfxMessageBox(_T("Unable to set registry key"));
+			return;
+		}
+		RegCloseKey(hkey);
+
+	}
+	else {
+		lReturn = RegOpenKeyEx(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+									0L, KEY_ALL_ACCESS, &hkey);
+		if (lReturn == ERROR_SUCCESS)
+		{
+			//remove key
+			//TODO: why this will fail
+			RegDeleteKeyRecursive(hkey, _T(APP_NAME));
+		}
+		else {
+			AfxMessageBox(_T("Unable to remove registry key"));
+		}
+		RegCloseKey(hkey);
+	}
+
+}
+
+void CHWDetectDlg::loadSetting()
+{
+	HKEY hkey = NULL;
+	long lReturn;
+	lReturn = RegCreateKey(HKEY_CURRENT_USER, APP_REG_PATH, &hkey);
+	if (lReturn == ERROR_SUCCESS)
+	{
+		m_bStartInTray = GetVal(hkey, L"bStartInTray");
+		m_bCloseToTray = GetVal(hkey, L"bCloseToTray");
+		m_bLaunchOnBoot = GetVal(hkey, L"bLaunchOnBoot");
+	}
+
 }
