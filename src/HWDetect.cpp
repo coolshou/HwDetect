@@ -24,7 +24,8 @@ CHWDetectApp::CHWDetectApp()
 {
 	// TODO: add construction code here,
 	// Place all significant initialization in InitInstance
-
+	//https://msdn.microsoft.com/en-us/library/dd465232.aspx
+	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_ALL_ASPECTS;
 }
 
 
@@ -56,18 +57,17 @@ BOOL CHWDetectApp::InitInstance()
 	SetRegistryKey(_T(APP_ORG));
 
 	// Create the tray icon
-	if (!m_TrayIcon.Create(WM_ICON_NOTIFY, // Icon notify message to use, 响应消息
-		_T(APP_NAME), // tooltip,鼠标放置其上时显示文字
-		LoadIcon(IDR_MAINFRAME), // ID of tray icon,托盘图标
-		IDR_TRAY_MENU)) // ID of PopUp Menu,右键弹出菜单
+	if (!m_TrayIcon.Create(WM_ICON_NOTIFY, // Icon notify message to use
+		_T(APP_NAME), // tooltip
+		LoadIcon(IDR_MAINFRAME), // ID of tray icon
+		IDR_TRAY_MENU)) // ID of PopUp Menu
 	{
 		return FALSE;
 	}
 	CHWDetectDlg dlg;
 	m_pMainWnd = &dlg;
-	//m_pMainWnd.inst
-
 	INT_PTR nResponse = dlg.DoModal();
+	/*
 	if (nResponse == IDOK)
 	{
 		// TODO: Place code here to handle when the dialog is
@@ -78,7 +78,7 @@ BOOL CHWDetectApp::InitInstance()
 		// TODO: Place code here to handle when the dialog is
 		//  dismissed with Cancel
 	}
-
+	*/
 	// Since the dialog has been closed, return FALSE so that we exit the
 	//  application, rather than start the application's message pump.
 	return FALSE;

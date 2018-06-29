@@ -95,6 +95,7 @@ CHWDetectDlg::CHWDetectDlg(CWnd* pParent)
 	: CDialog(CHWDetectDlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	m_bInitVisible = true;
 	loadSetting();
 }
 
@@ -118,6 +119,8 @@ BEGIN_MESSAGE_MAP(CHWDetectDlg, CDialog)
 	ON_COMMAND(ID_POPUP_DISABLE, OnPopupDisable)
 	ON_BN_CLICKED(IDC_BUTTON_CLEAR, OnClearButtonClick)
 	ON_COMMAND(ID_EXIT, &CHWDetectDlg::OnExit)
+	ON_WM_WINDOWPOSCHANGING()
+	ON_WM_WINDOWPOSCHANGED()
 END_MESSAGE_MAP()
 
 
@@ -126,17 +129,15 @@ END_MESSAGE_MAP()
 BOOL CHWDetectDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
-
 	// minimize at startup
 	if (m_bStartInTray)
 	{
 		PostMessage(WM_SYSCOMMAND, SC_MINIMIZE, 0);
 		// this seems to be a workaround to let the statement above to get working
-		CRect rect;
-		GetWindowRect(rect);
-		SetWindowPos(&CWnd::wndTop, rect.left, rect.top, rect.Width(), rect.Height(), SWP_HIDEWINDOW | SWP_NOSIZE | SWP_NOMOVE);
+		//CRect rect;
+		//GetWindowRect(rect);
+		//SetWindowPos(&CWnd::wndTop, rect.left, rect.top, rect.Width(), rect.Height(), SWP_HIDEWINDOW | SWP_NOSIZE | SWP_NOMOVE);
 	}
-	
 	// Add "About..." menu item to system menu.
 
 	// IDM_ABOUTBOX must be in the system command range.
@@ -204,7 +205,6 @@ BOOL CHWDetectDlg::OnInitDialog()
 	}
 	m_FileVersion = CGlobalFunctions::GetFileVersionX();
 	m_ProductVersion = CGlobalFunctions::GetProductVersionX();
-	//GetFileVersionX();
 
 	// --------------------------------------
 	// At this point, we need set everything
@@ -255,7 +255,22 @@ void CHWDetectDlg::OnSysCommand(UINT nID, LPARAM lParam)
 			}
 	}
 }
-
+void CHWDetectDlg::OnWindowPosChanging(WINDOWPOS FAR* lpwndpos)
+{
+	//ths can remove splich issue but tray icon double click to show main dialog will not work
+	if (!m_bInitVisible)
+	{
+		lpwndpos->flags &= ~SWP_SHOWWINDOW;
+		//m_bVisible = true;
+	}
+	
+	CDialog::OnWindowPosChanging(lpwndpos);
+}
+void CHWDetectDlg::OnWindowPosChanged(WINDOWPOS FAR* lpwndpos) {
+	if (!m_bInitVisible) {
+		m_bInitVisible = true;
+	}
+}
 void CHWDetectDlg::OnClose()
 {
 	PostQuitMessage(0);
@@ -596,7 +611,10 @@ BOOL CHWDetectDlg::OnEraseBkgnd(CDC* pDC) {
 
 }
 
-
+void CHWDetectDlg::SetVisibal(BOOL visibal)
+{
+	m_bInitVisible = visibal;
+}
 void CHWDetectDlg::OnExit()
 {
 	m_bCloseToTray = false;
@@ -665,6 +683,7 @@ void CHWDetectDlg::loadSetting()
 		m_bStartInTray = GetVal(hkey, L"bStartInTray");
 		m_bCloseToTray = GetVal(hkey, L"bCloseToTray");
 		m_bLaunchOnBoot = GetVal(hkey, L"bLaunchOnBoot");
+		m_bInitVisible = !m_bStartInTray;
 	}
 
 }
