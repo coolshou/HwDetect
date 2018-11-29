@@ -258,7 +258,7 @@ void CHWDetectDlg::OnSysCommand(UINT nID, LPARAM lParam)
 void CHWDetectDlg::OnWindowPosChanging(WINDOWPOS FAR* lpwndpos)
 {
 	//ths can remove splich issue but tray icon double click to show main dialog will not work
-	if (!m_bInitVisible)
+	if (m_bInitVisible)
 	{
 		lpwndpos->flags &= ~SWP_SHOWWINDOW;
 		//m_bVisible = true;
@@ -663,7 +663,8 @@ void CHWDetectDlg::applySetting()
 		{
 			//remove key
 			//TODO: why this will fail
-			RegDeleteKeyRecursive(hkey, _T(APP_NAME));
+			lReturn = RegDeleteKeyRecursive(hkey, _T(APP_NAME));
+			TRACE("%s", lReturn);
 		}
 		else {
 			AfxMessageBox(_T("Unable to remove registry key"));
