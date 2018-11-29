@@ -23,20 +23,24 @@ echo ===================================
 exit /b
 
 :Build
-call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Auxiliary\Build\vcvars32.bat"
-MSBuild HWDetect.sln /t:Rebuild /p:Configuration=Release;Platform=x86
+REM call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Auxiliary\Build\vcvars32.bat"
+call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86 8.1
+MSBuild HWDetect.sln /m /t:Rebuild /p:Configuration=Release;Platform=x86
 
-call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Auxiliary\Build\vcvars64.bat"
-MSBuild HWDetect.sln /t:Rebuild /p:Configuration=Release;Platform=x64
+REM call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Auxiliary\Build\vcvars64.bat"
+call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64 8.1
+MSBuild HWDetect.sln /m /t:Rebuild /p:Configuration=Release;Platform=x64
 
 call "c:\Program Files (x86)\Inno Setup 5\compil32.exe" /cc installer\hwdetect.iss
 exit /b
 
 :Clean
-call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Auxiliary\Build\vcvars32.bat"
+REM call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Auxiliary\Build\vcvars32.bat"
+call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
 MSBuild wlan.sln /t:clean /p:Configuration=Release;Platform=x86
 
-call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Auxiliary\Build\vcvars64.bat"
+REM call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Auxiliary\Build\vcvars64.bat"
+call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
 MSBuild wlan.sln /t:clean /p:Configuration=Release;Platform=x64
 
 exit /b

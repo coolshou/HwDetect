@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "HwDetect"
-#define MyAppVersion "1.0.0.5"
+#define MyAppVersion "1.0.0.6"
 #define MyAppPublisher "Coonshou.idv, Inc."
 #define MyAppURL "https://github.com/coolshou/HwDetect"
 #define MyAppExeName "HWDetect.exe"
@@ -32,6 +32,7 @@ AppMutex={#MyAppName}
 SetupIconFile=..\src\res\HWDetect.ico
 UninstallDisplayIcon={app}\HWDetect.exe
 CloseApplications=force
+PrivilegesRequired=admin
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -49,4 +50,4 @@ Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: runascurrentuser nowait postinstall skipifsilent

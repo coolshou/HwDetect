@@ -122,7 +122,7 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,5
+ FILEVERSION 1,0,0,6
  PRODUCTVERSION 1,0,0,5
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
@@ -140,9 +140,9 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "coolshou.idv"
             VALUE "FileDescription", "Detect HW change"
-            VALUE "FileVersion", "1.0.0.5"
+            VALUE "FileVersion", "1.0.0.6"
             VALUE "InternalName", "HWDetect.exe"
-            VALUE "LegalCopyright", "2018: (c) coolshou.idv.  All rights reserved."
+            VALUE "LegalCopyright", "2018(c) coolshou.idv.  All rights reserved."
             VALUE "OriginalFilename", "HWDetect.exe"
             VALUE "ProductName", "HWDetect"
             VALUE "ProductVersion", "1.0.0.5"
